@@ -8,9 +8,9 @@
 int byte = 0;
 volatile unsigned int total;
 
-void timer(void);
-void LED(void);
-void UART(void);
+void timer(void);   //timer setup  
+void LED(void);     //LED setup
+void UART(void);    //UART setup
 
 int main(void)
 {
@@ -30,14 +30,14 @@ void timer(void)
 {
     TA0CTL = TASSEL_2 + MC_1 + ID_0 + TACLR;   // Timer A0 Control: SMCLK (~ 1MHz), Up mode, No Division, Clear timer
 
-    TA0CCTL1 |= OUTMOD_3;
-    TA0CCTL2 |= OUTMOD_3;
-    TA0CCTL3 |= OUTMOD_3;
+    TA0CCTL1 |= OUTMOD_3;   //Set and reset for red mode
+    TA0CCTL2 |= OUTMOD_3;   //Set and reset for green mode
+    TA0CCTL3 |= OUTMOD_3;   //Set and reset for blue mode
 
-    TA0CCR0 = 256;
-    TA0CCR1 = 0;
-    TA0CCR2 = 0;
-    TA0CCR3 = 0;
+    TA0CCR0 = 256;  //Full Cycle
+    TA0CCR1 = 0;    //Red LED set at 0%
+    TA0CCR2 = 0;    //Green LED set at 0%
+    TA0CCR3 = 0;    //Blue LED set at 0%
 }
 
 void LED(void)
@@ -52,8 +52,8 @@ void UART(void)
 
     UCA1CTL1 |= UCSWRST;                    //reset state machine
     UCA1CTL1 |= UCSSEL_2;                   //SMCLK for UART
-    UCA1BR0 = 104;                          //
-    UCA1BR1 = 0;                            //
+    UCA1BR0 = 104;                          //9600 BAUD Rate
+    UCA1BR1 = 0;                            //9600 BAUD Rate
     UCA1MCTL |= UCBRS_1 + UCBRF_0;          //Modulation
     UCA1CTL1 &= ~UCSWRST;                   //Initialize USCI state machine
     UCA1IE |= UCRXIE;                       //Enable USCI_A0 RX interrupt
