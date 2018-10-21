@@ -67,32 +67,32 @@ __interrupt void USCI_A1_ISR(void)
     switch(byte)
     {
     case 0:
-            total = UCA1RXBUF;
+            total = UCA1RXBUF; //Sets total equal to the first byte of UART signal 
             break;
     case 1:
-            TA0CCR1 = UCA1RXBUF;
+            TA0CCR1 = UCA1RXBUF; //Sets CC register 1 of Timer A0 to the second byte of UART signal
             break;
     case 2:
-            TA0CCR2 = UCA1RXBUF;
+            TA0CCR2 = UCA1RXBUF;  //Sets CC register 2 of Timer A0 to the third byte of UART signal
             break;
     case 3:
-            TA0CCR3 = UCA1RXBUF;
-            while(!(UCA1IFG & UCTXIFG));
-            UCA1TXBUF = total - 3;
+            TA0CCR3 = UCA1RXBUF;  //Sets CC register 3 of Timer A0 to the third byte of UART signal
+            while(!(UCA1IFG & UCTXIFG));  //Checks to make sure TX buffer is ready
+            UCA1TXBUF = total - 3;  //Sets the first byte of the transmitted UART signal to the previous total minus 3
             break;
 
     default:
-            if(byte > total)
+            if(byte > total)  
             {
                 byte = -1;
             }
             else
             {
-                while(!(UCA1IFG & UCTXIFG));
-                UCA1TXBUF = UCA1RXBUF;
+                while(!(UCA1IFG & UCTXIFG)); //Checks to make sure TX buffer is ready
+                UCA1TXBUF = UCA1RXBUF; //sets TX buffer to the remaining bytes stored in RX buffer
             }
             break;
     }
 
-    byte += 1;
+    byte += 1; //increments byte by 1 after each case, selecting the next case in switch
 }
